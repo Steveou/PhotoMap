@@ -53,18 +53,6 @@ namespace PhotoMap
                         };
 
                         photosList.Add(photo);
-
-                        /*
-                        MapIcon mapIcon1 = new MapIcon();
-                        mapIcon1.Location = new Geopoint(new BasicGeoposition() { Latitude = properties.Latitude.Value, Longitude = properties.Longitude.Value });
-                        mapIcon1.NormalizedAnchorPoint = new Point(0.5, 1.0);
-                        mapIcon1.Title = picture.Name;
-                        mapIcon1.ZIndex = 0;
-
-                        // Add the MapIcon to the map.
-                        MapControl1.MapElements.Add(mapIcon1);
-
-                        PhotosList.Items.Add(picture.Name); */
                     }
                 }
             }
