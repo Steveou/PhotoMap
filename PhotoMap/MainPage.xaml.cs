@@ -13,8 +13,6 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
-
 namespace PhotoMap
 {
     /// <summary>
@@ -24,7 +22,9 @@ namespace PhotoMap
     {
         public MainPage()
         {
-            this.InitializeComponent();
+            InitializeComponent();
+
+            DataContext = new MainViewModel();
         }
     }
 }
