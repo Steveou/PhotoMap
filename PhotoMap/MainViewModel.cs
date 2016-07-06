@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Devices.Geolocation;
 using Windows.Storage;
 using Windows.Storage.Search;
 
@@ -48,8 +49,7 @@ namespace PhotoMap
                         Photo photo = new Photo()
                         {
                             Name = file.Name,
-                            Latitude = properties.Latitude.Value,
-                            Longitude = properties.Longitude.Value
+                            Location = new Geopoint(new BasicGeoposition() { Latitude = properties.Latitude.Value, Longitude = properties.Longitude.Value })
                         };
 
                         photosList.Add(photo);

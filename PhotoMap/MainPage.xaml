@@ -5,7 +5,7 @@
     xmlns:local="using:PhotoMap"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:Maps="using:Windows.UI.Xaml.Controls.Maps"
+    xmlns:maps="using:Windows.UI.Xaml.Controls.Maps"
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
@@ -20,7 +20,18 @@
         
         <Button Grid.Row="0" Grid.Column="0" Content="Load photos" Command="{Binding LoadPhotos}"/>
         <ListBox Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Photos}" DisplayMemberPath="Name"/>
-        <Maps:MapControl Grid.Row="1" Grid.Column="1" />
         
+        <maps:MapControl Grid.Row="1" Grid.Column="1">
+            <maps:MapItemsControl ItemsSource="{Binding Photos}">
+                <maps:MapItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid maps:MapControl.Location="{Binding Location}">
+                            <Ellipse Width="10" Height="10" Fill="{ThemeResource SystemControlBackgroundAccentBrush}" StrokeThickness="0"/>
+                        </Grid>
+                    </DataTemplate>
+                </maps:MapItemsControl.ItemTemplate>
+            </maps:MapItemsControl>
+        </maps:MapControl>
+
     </Grid>
 </Page>
