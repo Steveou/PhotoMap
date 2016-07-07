@@ -8,12 +8,14 @@ using System.Threading.Tasks;
 using Windows.Devices.Geolocation;
 using Windows.Storage;
 using Windows.Storage.Search;
+using Windows.UI.Xaml.Media.Imaging;
 
 namespace PhotoMap
 {
     public class MainViewModel : ReactiveObject
     {
         public ReactiveCommand<List<Photo>> LoadPhotos { get; protected set; }
+        public ReactiveCommand<BitmapImage> ShowPhoto { get; protected set; }
 
         private ObservableAsPropertyHelper<List<Photo>> photos;
         public List<Photo> Photos => photos.Value;
@@ -31,6 +33,11 @@ namespace PhotoMap
             }
         }
 
+        private ObservableAsPropertyHelper<BitmapImage> image;
+        public BitmapImage Image => image.Value;
+
+        public string Test => @"http://stevekr-soft.de/logo.png";
+
         public MainViewModel()
         {
             LoadPhotos = ReactiveCommand.CreateAsyncTask(_ => GetPhotos());
@@ -38,6 +45,23 @@ namespace PhotoMap
 
             photos = LoadPhotos.ToProperty(this, vm => vm.Photos, new List<Photo>());
             isLoading = LoadPhotos.IsExecuting.ToProperty(this, vm => vm.IsLoading, false);
+
+            ShowPhoto = ReactiveCommand.CreateAsyncTask(async _ =>
+            {
+                BitmapImage image = new BitmapImage();
+                using (var fileStream = await SelectedPhoto.File.OpenAsync(FileAccessMode.Read))
+                {
+                    image.SetSource(fileStream);
+                }
+
+                return image;
+            });
+
+            this.WhenAnyValue(vm => vm.SelectedPhoto)
+                .Where(p => p != null)
+                .InvokeCommand(ShowPhoto);
+
+            image = ShowPhoto.ToProperty(this, vm => vm.Image, new BitmapImage());
         }
 
         /// <summary>
@@ -64,6 +88,7 @@ namespace PhotoMap
                         results.Add(new Photo()
                         {
                             Name = file.Name,
+                            File = file,
                             DateTaken = properties.DateTaken,
                             Location = new Geopoint(new BasicGeoposition()
                             {

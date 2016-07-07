@@ -12,6 +12,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="40" />
             <RowDefinition />
+            <RowDefinition Height="200" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="300"/>
@@ -22,7 +23,10 @@
         <ListBox Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Photos}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedPhoto, Mode=TwoWay}"/>
         <ProgressRing Grid.Row="1" Grid.Column="0" IsActive="{Binding IsLoading}"/>
 
-        <maps:MapControl x:Name="mapControl" Grid.Row="0" Grid.Column="1" Grid.RowSpan="2">
+        <Rectangle Grid.Row="2" Grid.Column="0" Fill="Black" />
+        <Image Grid.Row="2" Grid.Column="0" Source="{Binding Image}"/>
+
+        <maps:MapControl x:Name="mapControl" Grid.Row="0" Grid.Column="1" Grid.RowSpan="3">
             <maps:MapItemsControl ItemsSource="{Binding Photos}">
                 <maps:MapItemsControl.ItemTemplate>
                     <DataTemplate>

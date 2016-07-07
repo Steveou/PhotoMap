@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Devices.Geolocation;
+using Windows.Storage;
 
 namespace PhotoMap
 {
@@ -13,6 +14,7 @@ namespace PhotoMap
     public class Photo
     {
         public string Name { get; set; }
+        public StorageFile File { get; set; }
         public Geopoint Location { get; set; }
         public DateTimeOffset DateTaken { get; set; }
     }
