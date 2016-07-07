@@ -14,5 +14,6 @@ namespace PhotoMap
     {
         public string Name { get; set; }
         public Geopoint Location { get; set; }
+        public DateTimeOffset DateTaken { get; set; }
     }
 }

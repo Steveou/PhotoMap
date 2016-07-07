@@ -64,6 +64,7 @@ namespace PhotoMap
                         results.Add(new Photo()
                         {
                             Name = file.Name,
+                            DateTaken = properties.DateTaken,
                             Location = new Geopoint(new BasicGeoposition()
                             {
                                 Latitude = properties.Latitude.Value,
