@@ -20,7 +20,8 @@
         
         <Button Grid.Row="0" Grid.Column="0" Content="Load photos" Command="{Binding LoadPhotos}"/>
         <ListBox Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Photos}" DisplayMemberPath="Name"/>
-        
+        <ProgressRing Grid.Row="1" Grid.Column="0" IsActive="{Binding IsLoading}"/>
+
         <maps:MapControl Grid.Row="1" Grid.Column="1">
             <maps:MapItemsControl ItemsSource="{Binding Photos}">
                 <maps:MapItemsControl.ItemTemplate>

@@ -17,12 +17,16 @@ namespace PhotoMap
         private ObservableAsPropertyHelper<List<Photo>> photos;
         public List<Photo> Photos => photos.Value;
 
+        private ObservableAsPropertyHelper<bool> isLoading;
+        public bool IsLoading => isLoading.Value;
+
         public MainViewModel()
         {
             LoadPhotos = ReactiveCommand.CreateAsyncTask(p => GetPhotos());
             LoadPhotos.ThrownExceptions.Subscribe(ex => System.Diagnostics.Debug.WriteLine(ex));
 
             photos = LoadPhotos.ToProperty(this, x => x.Photos, new List<Photo>());
+            isLoading = LoadPhotos.IsExecuting.ToProperty(this, x => x.IsLoading, false);
         }
 
         /// <summary>
@@ -49,7 +53,10 @@ namespace PhotoMap
                         Photo photo = new Photo()
                         {
                             Name = file.Name,
-                            Location = new Geopoint(new BasicGeoposition() { Latitude = properties.Latitude.Value, Longitude = properties.Longitude.Value })
+                            Location = new Geopoint(new BasicGeoposition() {
+                                Latitude = properties.Latitude.Value,
+                                Longitude = properties.Longitude.Value
+                            })
                         };
 
                         photosList.Add(photo);
