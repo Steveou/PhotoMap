@@ -45,22 +45,21 @@ namespace PhotoMap
             ShowPhoto = ReactiveCommand.CreateAsyncTask(_ => LoadImage());
 
             this.WhenAnyValue(vm => vm.SelectedPhoto)
-                .Where(p => p != null)
                 .InvokeCommand(ShowPhoto);
 
             this.WhenAnyValue(vm => vm.SelectedPhoto)
                 .Buffer(2, 1)
-                .Subscribe(p => {
+                .Subscribe(p =>
+                {
                     if(p[0] != null)
                         p[0].IsSelected = false;
 
-                    if(p[1] != null)
-                        p[1].IsSelected = true;
+                    p[1].IsSelected = true;
                 });
 
             photos = LoadPhotos.ToProperty(this, vm => vm.Photos, new List<Photo>());
             isLoading = LoadPhotos.IsExecuting.ToProperty(this, vm => vm.IsLoading, false);
-            image = ShowPhoto.ToProperty(this, vm => vm.Image, new BitmapImage());
+            image = ShowPhoto.ToProperty(this, vm => vm.Image, null);
             isPhotoLoading = ShowPhoto.IsExecuting.ToProperty(this, vm => vm.IsPhotoLoading, false);
         }
 
@@ -85,17 +84,16 @@ namespace PhotoMap
                     if (properties.Latitude != null
                         && properties.Longitude != null)
                     {
-                        results.Add(new Photo()
-                        {
-                            Name = file.Name,
-                            File = file,
-                            DateTaken = properties.DateTaken,
-                            Location = new Geopoint(new BasicGeoposition()
+                        results.Add(new Photo(
+                            file.Name,
+                            file,
+                            new Geopoint(new BasicGeoposition()
                             {
                                 Latitude = properties.Latitude.Value,
                                 Longitude = properties.Longitude.Value
-                            })
-                        });
+                            }),
+                            properties.DateTaken)
+                        );
                     }
                 }
             }
@@ -105,7 +103,11 @@ namespace PhotoMap
 
         private async Task<BitmapImage> LoadImage()
         {
+            if (SelectedPhoto == null)
+                return null;
+
             BitmapImage image = new BitmapImage();
+
             using (var fileStream = await SelectedPhoto.File.OpenAsync(FileAccessMode.Read))
             {
                 image.SetSource(fileStream);

@@ -14,10 +14,10 @@ namespace PhotoMap
     /// </summary>
     public class Photo : ReactiveObject
     {
-        public string Name { get; set; }
-        public StorageFile File { get; set; }
-        public Geopoint Location { get; set; }
-        public DateTimeOffset DateTaken { get; set; }
+        public string Name { get; private set; }
+        public StorageFile File { get; private set; }
+        public Geopoint Location { get; private set; }
+        public DateTimeOffset DateTaken { get; private set; }
 
         private bool isSelected;
         public bool IsSelected
@@ -29,8 +29,13 @@ namespace PhotoMap
             }
         }
 
-        public Photo()
+        public Photo(string name, StorageFile file, Geopoint location, DateTimeOffset dateTaken)
         {
+            Name = name;
+            File = file;
+            Location = location;
+            DateTaken = dateTaken;
+
             isSelected = false;
         }
     }
