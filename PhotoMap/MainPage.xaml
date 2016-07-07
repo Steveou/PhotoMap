@@ -22,9 +22,9 @@
         <Button Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Content="Load photos" Command="{Binding LoadPhotos}"/>
         <ListBox Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Photos}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedPhoto, Mode=TwoWay}"/>
         <ProgressRing Grid.Row="1" Grid.Column="0" IsActive="{Binding IsLoading}"/>
-
-        <Rectangle Grid.Row="2" Grid.Column="0" Fill="Black" />
-        <Image Grid.Row="2" Grid.Column="0" Source="{Binding Image}"/>
+        <Border Grid.Row="2" Grid.Column="0" Background="Black">
+            <Image Source="{Binding Image}"/>
+        </Border>
 
         <maps:MapControl x:Name="mapControl" Grid.Row="0" Grid.Column="1" Grid.RowSpan="3">
             <maps:MapItemsControl ItemsSource="{Binding Photos}">

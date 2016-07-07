@@ -23,6 +23,9 @@ namespace PhotoMap
         private ObservableAsPropertyHelper<bool> isLoading;
         public bool IsLoading => isLoading.Value;
 
+        private ObservableAsPropertyHelper<BitmapImage> image;
+        public BitmapImage Image => image.Value;
+
         private Photo selectedPhoto;
         public Photo SelectedPhoto
         {
@@ -33,34 +36,17 @@ namespace PhotoMap
             }
         }
 
-        private ObservableAsPropertyHelper<BitmapImage> image;
-        public BitmapImage Image => image.Value;
-
-        public string Test => @"http://stevekr-soft.de/logo.png";
-
         public MainViewModel()
         {
             LoadPhotos = ReactiveCommand.CreateAsyncTask(_ => GetPhotos());
-            LoadPhotos.ThrownExceptions.Subscribe(ex => System.Diagnostics.Debug.WriteLine(ex));
-
-            photos = LoadPhotos.ToProperty(this, vm => vm.Photos, new List<Photo>());
-            isLoading = LoadPhotos.IsExecuting.ToProperty(this, vm => vm.IsLoading, false);
-
-            ShowPhoto = ReactiveCommand.CreateAsyncTask(async _ =>
-            {
-                BitmapImage image = new BitmapImage();
-                using (var fileStream = await SelectedPhoto.File.OpenAsync(FileAccessMode.Read))
-                {
-                    image.SetSource(fileStream);
-                }
-
-                return image;
-            });
+            ShowPhoto = ReactiveCommand.CreateAsyncTask(_ => LoadImage());
 
             this.WhenAnyValue(vm => vm.SelectedPhoto)
                 .Where(p => p != null)
                 .InvokeCommand(ShowPhoto);
 
+            photos = LoadPhotos.ToProperty(this, vm => vm.Photos, new List<Photo>());
+            isLoading = LoadPhotos.IsExecuting.ToProperty(this, vm => vm.IsLoading, false);
             image = ShowPhoto.ToProperty(this, vm => vm.Image, new BitmapImage());
         }
 
@@ -101,6 +87,17 @@ namespace PhotoMap
             }
 
             return results;
+        }
+
+        private async Task<BitmapImage> LoadImage()
+        {
+            BitmapImage image = new BitmapImage();
+            using (var fileStream = await SelectedPhoto.File.OpenAsync(FileAccessMode.Read))
+            {
+                image.SetSource(fileStream);
+            }
+
+            return image;
         }
     }
 }
