@@ -36,7 +36,7 @@
             </ListBox.ItemTemplate>
         </ListBox>
         <ProgressRing Grid.Row="1" IsActive="{Binding IsLoading}"/>
-        
+
         <Border Grid.Row="2" Background="Black">
             <Grid>
                 <Image Source="{Binding Image}"/>
@@ -48,9 +48,30 @@
             <maps:MapItemsControl ItemsSource="{Binding Photos}">
                 <maps:MapItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Grid maps:MapControl.Location="{Binding Location}">
-                            <Ellipse Width="10" Height="10" Fill="{ThemeResource SystemControlBackgroundAccentBrush}"/>
-                        </Grid>
+                        <UserControl>
+                            <Grid maps:MapControl.Location="{Binding Location}">
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup>
+                                        <VisualStateGroup.States>
+                                            <VisualState>
+
+                                                <VisualState.StateTriggers>
+                                                    <StateTrigger IsActive="{Binding IsSelected}"/>
+                                                </VisualState.StateTriggers>
+
+                                                <VisualState.Setters>
+                                                    <Setter Target="Pin.(Shape.Fill)" Value="Red"/>
+                                                    <Setter Target="Pin.(Control.Width)" Value="20"/>
+                                                    <Setter Target="Pin.(Control.Height)" Value="20"/>
+                                                </VisualState.Setters>
+
+                                            </VisualState>
+                                        </VisualStateGroup.States>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+                                <Ellipse x:Name="Pin" Width="10" Height="10" Fill="{ThemeResource SystemControlBackgroundAccentBrush}"/>
+                            </Grid>
+                        </UserControl>
                     </DataTemplate>
                 </maps:MapItemsControl.ItemTemplate>
             </maps:MapItemsControl>

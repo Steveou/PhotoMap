@@ -48,6 +48,16 @@ namespace PhotoMap
                 .Where(p => p != null)
                 .InvokeCommand(ShowPhoto);
 
+            this.WhenAnyValue(vm => vm.SelectedPhoto)
+                .Buffer(2, 1)
+                .Subscribe(p => {
+                    if(p[0] != null)
+                        p[0].IsSelected = false;
+
+                    if(p[1] != null)
+                        p[1].IsSelected = true;
+                });
+
             photos = LoadPhotos.ToProperty(this, vm => vm.Photos, new List<Photo>());
             isLoading = LoadPhotos.IsExecuting.ToProperty(this, vm => vm.IsLoading, false);
             image = ShowPhoto.ToProperty(this, vm => vm.Image, new BitmapImage());
