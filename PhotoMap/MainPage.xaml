@@ -19,10 +19,10 @@
         </Grid.ColumnDefinitions>
         
         <Button Grid.Row="0" Grid.Column="0" Content="Load photos" Command="{Binding LoadPhotos}"/>
-        <ListBox Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Photos}" DisplayMemberPath="Name"/>
+        <ListBox Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Photos}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedPhoto, Mode=TwoWay}"/>
         <ProgressRing Grid.Row="1" Grid.Column="0" IsActive="{Binding IsLoading}"/>
-
-        <maps:MapControl Grid.Row="1" Grid.Column="1">
+        
+        <maps:MapControl Grid.Row="1" Grid.Column="1" Center="{Binding MapCenter, Mode=TwoWay}" ZoomLevel="{Binding MapZoomLevel, Mode=TwoWay}">
             <maps:MapItemsControl ItemsSource="{Binding Photos}">
                 <maps:MapItemsControl.ItemTemplate>
                     <DataTemplate>
