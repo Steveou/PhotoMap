@@ -20,7 +20,17 @@
         </Grid.ColumnDefinitions>
         
         <Button Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Content="Load photos" Command="{Binding LoadPhotos}"/>
-        <ListBox Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Photos}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedPhoto, Mode=TwoWay}"/>
+        <ListBox Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Photos}" SelectedItem="{Binding SelectedPhoto, Mode=TwoWay}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                        <TextBlock Text="{Binding Name}" FontWeight="Bold"/>
+                        <TextBlock Text="{Binding DateTaken}"/>
+                    </StackPanel>
+                    
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
         <ProgressRing Grid.Row="1" Grid.Column="0" IsActive="{Binding IsLoading}"/>
         <Border Grid.Row="2" Grid.Column="0" Background="Black">
             <Image Source="{Binding Image}"/>
