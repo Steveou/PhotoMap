@@ -26,6 +26,9 @@ namespace PhotoMap
         private ObservableAsPropertyHelper<BitmapImage> image;
         public BitmapImage Image => image.Value;
 
+        private ObservableAsPropertyHelper<bool> isPhotoLoading;
+        public bool IsPhotoLoading => isPhotoLoading.Value;
+
         private Photo selectedPhoto;
         public Photo SelectedPhoto
         {
@@ -48,6 +51,7 @@ namespace PhotoMap
             photos = LoadPhotos.ToProperty(this, vm => vm.Photos, new List<Photo>());
             isLoading = LoadPhotos.IsExecuting.ToProperty(this, vm => vm.IsLoading, false);
             image = ShowPhoto.ToProperty(this, vm => vm.Image, new BitmapImage());
+            isPhotoLoading = ShowPhoto.IsExecuting.ToProperty(this, vm => vm.IsPhotoLoading, false);
         }
 
         /// <summary>

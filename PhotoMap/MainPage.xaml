@@ -7,6 +7,9 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:maps="using:Windows.UI.Xaml.Controls.Maps"
     mc:Ignorable="d">
+    <Page.Resources>
+        <local:DateTimeOffsetConverter x:Key="DateTimeOffsetConverter"/>
+    </Page.Resources>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
@@ -19,29 +22,34 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         
-        <Button Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Content="Load photos" Command="{Binding LoadPhotos}"/>
-        <ListBox Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Photos}" SelectedItem="{Binding SelectedPhoto, Mode=TwoWay}">
+        <Button HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Content="Load photos" Command="{Binding LoadPhotos}"/>
+        
+        <ListBox Grid.Row="1" ItemsSource="{Binding Photos}" SelectedItem="{Binding SelectedPhoto, Mode=TwoWay}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel>
                         <TextBlock Text="{Binding Name}" FontWeight="Bold"/>
-                        <TextBlock Text="{Binding DateTaken}"/>
+                        <TextBlock Text="{Binding DateTaken, Converter={StaticResource DateTimeOffsetConverter}, ConverterParameter='G'}"/>
                     </StackPanel>
                     
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <ProgressRing Grid.Row="1" Grid.Column="0" IsActive="{Binding IsLoading}"/>
-        <Border Grid.Row="2" Grid.Column="0" Background="Black">
-            <Image Source="{Binding Image}"/>
+        <ProgressRing Grid.Row="1" IsActive="{Binding IsLoading}"/>
+        
+        <Border Grid.Row="2" Background="Black">
+            <Grid>
+                <Image Source="{Binding Image}"/>
+                <ProgressRing IsActive="{Binding IsPhotoLoading}"/>
+            </Grid>
         </Border>
 
-        <maps:MapControl x:Name="mapControl" Grid.Row="0" Grid.Column="1" Grid.RowSpan="3">
+        <maps:MapControl x:Name="Map" Grid.Column="1" Grid.RowSpan="3">
             <maps:MapItemsControl ItemsSource="{Binding Photos}">
                 <maps:MapItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Grid maps:MapControl.Location="{Binding Location}">
-                            <Ellipse Width="10" Height="10" Fill="{ThemeResource SystemControlBackgroundAccentBrush}" StrokeThickness="0"/>
+                            <Ellipse Width="10" Height="10" Fill="{ThemeResource SystemControlBackgroundAccentBrush}"/>
                         </Grid>
                     </DataTemplate>
                 </maps:MapItemsControl.ItemTemplate>

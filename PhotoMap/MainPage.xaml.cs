@@ -33,7 +33,7 @@ namespace PhotoMap
             // Always center and zoom to the location of the selected photo
             viewModel.WhenAnyValue(vm => vm.SelectedPhoto)
                 .Where(photo => photo != null)
-                .Subscribe(async photo => await mapControl.TrySetViewAsync(photo.Location, 16));
+                .Subscribe(async photo => await Map.TrySetViewAsync(photo.Location, 16));
         }
     }
 }
