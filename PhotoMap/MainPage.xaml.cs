@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -21,11 +22,18 @@ namespace PhotoMap
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        private MainViewModel viewModel;
+
         public MainPage()
         {
             InitializeComponent();
 
-            DataContext = new MainViewModel();
+            DataContext = viewModel = new MainViewModel();
+            
+            // Always center and zoom to the location of the selected photo
+            viewModel.WhenAnyValue(vm => vm.SelectedPhoto)
+                .Where(photo => photo != null)
+                .Subscribe(async photo => await mapControl.TrySetViewAsync(photo.Location, 16));
         }
     }
 }
