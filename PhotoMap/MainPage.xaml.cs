@@ -20,20 +20,38 @@ namespace PhotoMap
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class MainPage : Page
+    public sealed partial class MainPage : Page, IViewFor<MainViewModel>
     {
-        private MainViewModel viewModel;
+        public MainViewModel ViewModel { get; set; }
+
+        object IViewFor.ViewModel
+        {
+            get { return ViewModel; }
+            set { ViewModel = (MainViewModel)value;}
+        }
 
         public MainPage()
         {
             InitializeComponent();
 
-            DataContext = viewModel = new MainViewModel();
+            DataContext = ViewModel = new MainViewModel();
             
             // Always center and zoom to the location of the selected photo
-            viewModel.WhenAnyValue(vm => vm.SelectedPhoto)
+            ViewModel.WhenAnyValue(vm => vm.SelectedPhoto)
                 .Where(photo => photo != null)
                 .Subscribe(async photo => await Map.TrySetViewAsync(photo.Location, 16));
+            
+            // Scroll to selected image.
+            ViewModel.WhenAnyValue(vm => vm.SelectedPhoto)
+                .Where(photo => photo != null)
+                .Subscribe(photo => PhotosListBox.ScrollIntoView(photo));
+        }
+
+        private void Pin_PointerReleased(object sender, PointerRoutedEventArgs e)
+        {
+            var pin = (FrameworkElement)sender;
+
+            ViewModel.SelectedPhoto = pin.DataContext as Photo;
         }
     }
 }
